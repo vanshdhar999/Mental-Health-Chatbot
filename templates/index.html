@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Chatbot Home</title>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>AI Mental Health Assistant</h1>
+            {% if user %}
+                <p>Welcome, {{ user }}! <a href="/logout">Logout</a></p>
+            {% else %}
+                <a href="/login" class="button">Login</a>
+                <a href="/signup" class="button">Signup</a>
+            {% endif %}
+        </div>
+    </header>
+    <main>
+        <div class="chatbox">
+            <div id="chat-log"></div>
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button id="send-button">Send</button>
+        </div>
+    </main>
+    <script>
+        document.getElementById('send-button').onclick = function() {
+            const userMessage = document.getElementById('user-input').value;
+            if (userMessage.trim()) {
+                addMessageToChatLog("You: " + userMessage);
+                document.getElementById('user-input').value = '';
+
+                // Send user message to the server
+                fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: userMessage })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    addMessageToChatLog("Bot: " + data.response);
+                });
+            }
+        };
+
+        function addMessageToChatLog(message) {
+            const chatLog = document.getElementById('chat-log');
+            chatLog.innerHTML += "<div>" + message + "</div>";
+            chatLog.scrollTop = chatLog.scrollHeight; // Scroll to the bottom
+        }
+    </script>
+</body>
+</html>
+
