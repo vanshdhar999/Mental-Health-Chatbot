@@ -50,18 +50,23 @@ model = genai.GenerativeModel(
 
 @app.route("/")
 def index():
-    return render_template("index.html", user=session.get("username"))
+    return render_template("index.html", user=current_user)
 
 @app.route("/chat", methods=["POST"])
+@login_required
 def chat():
-    if "username" not in session:
-        return jsonify({"response":"You need to login before accessing the chatbot."})
 
-    if "message" not in request.form:
+    user_message = request.get_json().get("message")
+
+    if not user_message:
+         return jsonify({"response": "No message provided."}), 400
+
+    '''if "message" not in request.form:
         return jsonify({"response": "No message provided."})
-    user_message = request.form["message"]
+    '''
     bot_response = get_chatbot_response(user_message)
-    return jsonify({"response": bot_response})
+    return jsonify({"response":bot_response})
+
 
 # Function to send user input to the Gemini API and get a response
 def get_chatbot_response(user_input):
@@ -92,7 +97,7 @@ def signup():
             db.session.add(new_user)
             db.session.commit()
             flash("Signup successful! You can now log in.", "success")
-            return redirect(url_for("login"))
+            return redirect(url_for("index"))
         except Exception as e:
             flash("Username already exists. Please choose a different one.", "danger")
             print(e)  # Print exception for debugging
@@ -108,7 +113,8 @@ def login():
 
         if user:
             login_user(user)
-            return redirect(url_for("dashboard"))
+            session["username"] = user.username
+            return redirect(url_for("index"))
         else:
             flash("Invalid username or password. Please try again.", "danger")
 
