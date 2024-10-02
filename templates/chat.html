@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+    <title>Chat with AI Assistant</title>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-header">
+            <h2>Chat with AI Assistant</h2>
+            <button id="close-chat">X</button>
+        </div>
+        <div id="chat-log" class="chat-log"></div>
+        <div id="input-container">
+            <input type="text" id="user-input" placeholder="Type your message here..." required>
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+ <script src="{{ url_for('static', filename='js/chatbot.js') }}" defer></script>
+    </body>
+</html>
+

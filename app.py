@@ -29,25 +29,25 @@ def load_user(user_id):
 def index():
     return render_template("homepage.html", user=current_user)
 
-@app.route("/chat", methods=["POST"])
+@app.route("/chat", methods=["GET"])
 @login_required
 def chat():
+    
+    return render_template("chat.html")
 
+@app.route("/send_message", methods=["POST"])
+def send_message():
     user_message = request.get_json().get("message")
 
     if not user_message:
-         return jsonify({"response": "No message provided."}), 400
-
-    '''if "message" not in request.form:
-        return jsonify({"response": "No message provided."})
-    '''
+        return jsonify({"response":"No message provided"}), 400
+    
     bot_response = get_chatbot_response(user_message)
     return jsonify({"response":bot_response})
-
-
 # Function to send user input to the Gemini API and get a response
 def get_chatbot_response(user_input):
-    # Start a chat session
+   
+    # Start a chat session with personalized context
     chat_session = model.start_chat(
         history=[
             {
@@ -63,12 +63,29 @@ def get_chatbot_response(user_input):
     # Extract and return the model's response text
     return response.text
 
+
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        new_user = User(username=username, password=password)
+        name = request.form["name"]
+        age = request.form["age"]
+        likes = request.form.getlist("likes")  # Assuming likes is a multiple-choice input
+        dislikes = request.form.getlist("dislikes")  # Assuming dislikes is a multiple-choice input
+        favorite_sports = request.form.getlist("favorite_sports")  # Assuming sports is a multiple-choice input
+        favorite_songs = request.form.getlist("favorite_songs")  # Assuming songs is a multiple-choice input
+
+        new_user = User(
+            username=username,
+            password=password,
+            name=name,
+            age=age,
+            likes=", ".join(likes),  # Convert list to a comma-separated string
+            dislikes=", ".join(dislikes),  # Convert list to a comma-separated string
+            favorite_sports=", ".join(favorite_sports),  # Convert list to a comma-separated string
+            favorite_songs=", ".join(favorite_songs)  # Convert list to a comma-separated string
+        )
 
         try:
             db.session.add(new_user)
@@ -80,6 +97,7 @@ def signup():
             print(e)  # Print exception for debugging
     
     return render_template("signup.html")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -117,6 +135,10 @@ def mood_zone():
 def mood_page(mood_name):
     return render_template(f'moods/{mood_name}.html')
 
+@app.route("/users")
+def view_users():
+    users = User.query.all()  # Query all users from the database
+    return render_template("user.html", users=users)  # Render a template to display users
 
 if __name__ == "__main__":
     with app.app_context():
