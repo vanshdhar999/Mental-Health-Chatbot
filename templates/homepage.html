@@ -22,8 +22,14 @@
                 <a href="#">Resources</a>
                 <a href="#">Contact</a>
             </nav>
-            <div class="auth-buttons">
+                <div class="auth-options">
+                {% if user.is_authenticated %}
+                    
+                    Welcome , {{user.name}}
+                </a>
+                {% else %}
                 <a href="/signup" class="button">Sign Up</a>
+                {% endif %}
             </div>
         </div>
     </header>

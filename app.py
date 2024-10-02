@@ -46,23 +46,33 @@ def send_message():
     return jsonify({"response":bot_response})
 # Function to send user input to the Gemini API and get a response
 def get_chatbot_response(user_input):
-   
-    # Start a chat session with personalized context
+    # Collect user information for personalization
+    user_info = f"""
+    User's Name: {current_user.name}
+    Likes: {', '.join(current_user.likes)}
+    Dislikes: {', '.join(current_user.dislikes)}
+    Favorite Sports: {', '.join(current_user.favorite_sports)}
+    Favorite Songs: {', '.join(current_user.favorite_songs)}
+    """
+
+    # Prepend the user information to the user input
+    full_input = user_info + "\nUser says: " + user_input
+
+    # Start a chat session without context
     chat_session = model.start_chat(
         history=[
             {
                 "role": "user",
-                "parts": [user_input],
+                "parts": [full_input],
             }
         ]
     )
 
     # Send the user input and get the response
-    response = chat_session.send_message(user_input)
-    
+    response = chat_session.send_message(full_input)
+
     # Extract and return the model's response text
     return response.text
-
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
