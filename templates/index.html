@@ -6,29 +6,35 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <title>Chatbot Home</title>
 </head>
-<body>
-    <header>
-        <div class="header-content">
-            <h1>AI Mental Health Assistant</h1>
-            {% if user.is_authenticated %}
-                <p>Welcome, {{ user.username }}! <a href="/logout">Logout</a></p>
-            {% else %}
-                <a href="/login" class="button">Login</a>
-                <a href="/signup" class="button">Signup</a>
-            {% endif %}
-        </div>
-    </header>
-    <main>
+<body class="flex flex-col h-screen">
+    <header class="bg-gray-800 text-white p-4">
+        <h1 class="text-xl">AI Mental Health Assistant</h1>
         {% if user.is_authenticated %}
-        <div class="chatbox">
-            <div id="chat-log"></div>
-            <input type="text" id="user-input" placeholder="Type your message...">
-            <button id="send-button">Send</button>
+            <p class="mt-2">Welcome, {{ user.username }}! <a href="/logout" class="text-blue-400">Logout</a></p>
+        {% else %}
+            <a href="/login" class="button bg-blue-500 text-white rounded-lg px-4 py-2 mt-2">Login</a>
+            <a href="/signup" class="button bg-green-500 text-white rounded-lg px-4 py-2 mt-2">Signup</a>
+        {% endif %}
+    </header>
+    <main class="flex-1 p-4 overflow-auto">
+        {% if user.is_authenticated %}
+        <div id="chat-log" class="bg-gray-100 p-4 rounded-lg h-full overflow-y-auto">
+            <!-- Chat messages will appear here -->
         </div>
         {% else %}
-            <p>Please log in to access the chatbot.</p>
+            <p class="text-center">Please log in to access the chatbot.</p>
         {% endif %}
     </main>
+    <footer class="bg-gray-200 p-4">
+        {% if user.is_authenticated %}
+        <div class="flex items-center">
+            <input type="text" id="user-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block flex-1 p-2.5 h-12" placeholder="How Are You Feeling Today?" required />
+            <button id="send-button" class="ml-2 bg-gradient-to-br from-purple-600 to-blue-500 text-white rounded-lg px-3 py-1 shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Send
+            </button>
+        </div>
+        {% endif %}
+    </footer>
     <script>
         // Ensure that the chat functionality only runs if the user is authenticated
         if ({{ user.is_authenticated|tojson }}) {
