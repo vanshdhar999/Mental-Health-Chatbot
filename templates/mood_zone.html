@@ -1,44 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <title>Mood Zone</title>
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Include Tailwind CSS -->
 </head>
-<body>
-    <header>
-        <h1 class="text-center text-3xl font-bold py-4">Welcome to Mood Zone</h1>
-        <p class="text-center">Select a mood below to explore helpful resources, exercises, and articles!</p>
+
+<body class="bg-gray-100">
+    <header class="bg-blue-600 text-white py-6">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl font-bold">Welcome to Mood Zone</h1>
+            <p class="mt-2 text-lg">Select a mood below to explore helpful resources, exercises, and articles!</p>
+        </div>
     </header>
 
-    <main class="mood-container">
-        <div class="mood-card">
-            <a href="/mood/happy">
-                <img src="{{ url_for('static', filename='images/happy.jpg') }}" alt="Happy Mood">
-                <h2>Happy</h2>
-            </a>
+    <main class="container mx-auto py-10 px-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div class="mood-card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <a href="/mood/happy">
+                    <img src="{{ url_for('static', filename='images/happy.jpg') }}" alt="Happy Mood" class="w-full h-40 object-cover">
+                    <h2 class="text-xl font-semibold text-center py-4">Happy</h2>
+                </a>
+            </div>
+            <div class="mood-card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <a href="/mood/stressed">
+                    <img src="{{ url_for('static', filename='images/stressed.jpg') }}" alt="Stressed Mood" class="w-full h-40 object-cover">
+                    <h2 class="text-xl font-semibold text-center py-4">Stressed</h2>
+                </a>
+            </div>
+            <div class="mood-card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <a href="/mood/anxious">
+                    <img src="{{ url_for('static', filename='images/anxious.jpg') }}" alt="Anxious Mood" class="w-full h-40 object-cover">
+                    <h2 class="text-xl font-semibold text-center py-4">Anxious</h2>
+                </a>
+            </div>
+            <div class="mood-card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <a href="/mood/calm">
+                    <img src="{{ url_for('static', filename='images/calm.jpg') }}" alt="Calm Mood" class="w-full h-40 object-cover">
+                    <h2 class="text-xl font-semibold text-center py-4">Calm</h2>
+                </a>
+            </div>
+            <!-- Add more mood cards as needed -->
         </div>
-        <div class="mood-card">
-            <a href="/mood/stressed">
-                <img src="{{ url_for('static', filename='images/stressed.jpg') }}" alt="Stressed Mood">
-                <h2>Stressed</h2>
-            </a>
-        </div>
-        <div class="mood-card">
-            <a href="/mood/anxious">
-                <img src="{{ url_for('static', filename='images/anxious.jpg') }}" alt="Anxious Mood">
-                <h2>Anxious</h2>
-            </a>
-        </div>
-        <div class="mood-card">
-            <a href="/mood/calm">
-                <img src="{{ url_for('static', filename='images/calm.jpg') }}" alt="Calm Mood">
-                <h2>Calm</h2>
-            </a>
-        </div>
-        <!-- Add more mood cards as needed -->
     </main>
-</body>
+
+   </body>
+
 </html>
 
